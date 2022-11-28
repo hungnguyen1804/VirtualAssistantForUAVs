@@ -1,6 +1,4 @@
-package com.example.cps_lab411.API;
-
-import com.example.cps_lab411.UavState.WayPointParam;
+package com.example.cps_lab411.RestClient;
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;

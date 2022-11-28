@@ -1,4 +1,4 @@
-package com.example.cps_lab411.API;
+package com.example.cps_lab411.RestClient;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -30,7 +30,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class GetDataSensors extends Dialog implements View.OnClickListener {
+public class GetMsgSensors extends Dialog implements View.OnClickListener {
 
     public static final String TAG = MainActivity.class.getSimpleName();
     private static final String baseURL = "https://demo.thingsboard.io:443/api";
@@ -42,7 +42,7 @@ public class GetDataSensors extends Dialog implements View.OnClickListener {
     //test
     private TextView tv_battery, tv_connected, tv_mode, tv_armed;
 
-    public GetDataSensors(@NonNull Context context) {
+    public GetMsgSensors(@NonNull Context context) {
         super(context);
         this.context = context;
     }

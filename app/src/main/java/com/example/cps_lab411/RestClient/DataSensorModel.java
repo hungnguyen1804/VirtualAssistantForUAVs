@@ -1,4 +1,4 @@
-package com.example.cps_lab411.API;
+package com.example.cps_lab411.RestClient;
 
 public class DataSensorModel {
     private String sensorName;

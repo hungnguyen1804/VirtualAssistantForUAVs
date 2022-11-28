@@ -1,6 +1,4 @@
-package com.example.cps_lab411.API;
-
-import static com.example.cps_lab411.API.ModeSelectCommandDevice.idcommand;
+package com.example.cps_lab411.RestClient;
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;

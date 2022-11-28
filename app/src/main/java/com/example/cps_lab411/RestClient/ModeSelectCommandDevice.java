@@ -1,15 +1,13 @@
-package com.example.cps_lab411.API;
+package com.example.cps_lab411.RestClient;
 
-import static com.example.cps_lab411.API.DeviceManualControl.checkManualControl;
-import static com.example.cps_lab411.API.DeviceControlRobot.checkControlRobot;
+import static com.example.cps_lab411.RestClient.DeviceManualControl.checkManualControl;
+import static com.example.cps_lab411.RestClient.DeviceControlRobot.checkControlRobot;
 import static com.example.cps_lab411.MainActivity.modeDevice;
 import static com.example.cps_lab411.MapFragment.valueAlitude;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -19,10 +17,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 
 import com.example.cps_lab411.R;
-import com.google.android.gms.common.util.IOUtils;
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
@@ -30,11 +26,7 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 
 public class ModeSelectCommandDevice extends Dialog implements View.OnClickListener {

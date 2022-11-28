@@ -1,4 +1,4 @@
-package com.example.cps_lab411.API;
+package com.example.cps_lab411.RestClient;
 
 import android.content.Context;
 import android.view.LayoutInflater;

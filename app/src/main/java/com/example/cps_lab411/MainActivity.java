@@ -1,18 +1,16 @@
 package com.example.cps_lab411;
 
-import static com.example.cps_lab411.API.GetDataDevice.armedCloud;
-import static com.example.cps_lab411.API.GetDataDevice.batteryCloud;
-import static com.example.cps_lab411.API.GetDataDevice.connectedCloud;
-import static com.example.cps_lab411.API.GetDataDevice.latitudeCloud;
-import static com.example.cps_lab411.API.GetDataDevice.longitudeCloud;
-import static com.example.cps_lab411.API.GetDataDevice.modeCloud;
-import static com.example.cps_lab411.API.ModeSelectCommandDevice.HOLD;
-import static com.example.cps_lab411.API.ModeSelectCommandDevice.LAND;
-import static com.example.cps_lab411.API.ModeSelectCommandDevice.MANUAL;
-import static com.example.cps_lab411.API.ModeSelectCommandDevice.OFF_BOARD;
-import static com.example.cps_lab411.API.ModeSelectCommandDevice.POSITION;
-import static com.example.cps_lab411.API.ModeSelectCommandDevice.TAKE_OFF;
-import static com.example.cps_lab411.API.ModeSelectCommandDevice.altitudeTest;
+//import static com.example.cps_lab411.RestClient.GetMsgStateGlobalPositionDevice.armedCloud;
+//import static com.example.cps_lab411.RestClient.GetMsgStateGlobalPositionDevice.batteryCloud;
+//import static com.example.cps_lab411.RestClient.GetMsgStateGlobalPositionDevice.connectedCloud;
+//import static com.example.cps_lab411.RestClient.GetMsgStateGlobalPositionDevice.modeCloud;
+import static com.example.cps_lab411.RestClient.ModeSelectCommandDevice.HOLD;
+import static com.example.cps_lab411.RestClient.ModeSelectCommandDevice.LAND;
+import static com.example.cps_lab411.RestClient.ModeSelectCommandDevice.MANUAL;
+import static com.example.cps_lab411.RestClient.ModeSelectCommandDevice.OFF_BOARD;
+import static com.example.cps_lab411.RestClient.ModeSelectCommandDevice.POSITION;
+import static com.example.cps_lab411.RestClient.ModeSelectCommandDevice.TAKE_OFF;
+import static com.example.cps_lab411.RestClient.ModeSelectCommandDevice.altitudeTest;
 import static com.example.cps_lab411.MapFragment.checked;
 
 import androidx.annotation.NonNull;
@@ -39,13 +37,11 @@ import com.alan.alansdk.AlanCallback;
 import com.alan.alansdk.AlanConfig;
 import com.alan.alansdk.button.AlanButton;
 import com.alan.alansdk.events.EventCommand;
-import com.example.cps_lab411.API.DeviceModeCommand;
-import com.example.cps_lab411.API.DeviceMsgWaypoint;
-import com.example.cps_lab411.API.GetDataDevice;
-import com.example.cps_lab411.API.ModeSelectCommandDevice;
-import com.example.cps_lab411.API.State;
-import com.example.cps_lab411.API.Weather.Weather;
-import com.example.cps_lab411.API.Weather.WeatherData;
+import com.example.cps_lab411.RestClient.DeviceModeCommand;
+import com.example.cps_lab411.RestClient.GetMsgStateGlobalPositionDevice;
+import com.example.cps_lab411.RestClient.State;
+import com.example.cps_lab411.RestClient.Weather.Weather;
+import com.example.cps_lab411.RestClient.Weather.WeatherData;
 import com.example.cps_lab411.Category.CategoryFlightModeAdapter;
 import com.example.cps_lab411.Category.CategoryMode;
 import com.example.cps_lab411.Communication.EncodeData;
@@ -97,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        //startActivity();
         // Set up the Alan button
         AlanConfig config = AlanConfig.builder().setProjectId("66787a51a6e0c931fd225afba233c9522e956eca572e1d8b807a3e2338fdd0dc/stage").build();
         alanButton = findViewById(R.id.alan_button);
@@ -188,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         } else {
                             encodeData.SendCommandArmDisarm((byte) 1);
                         }
-                        if (armedCloud == 1) {
+                        if (State.getInstance().getArmed() == 1) {
                             deviceModeCommand.SendDataDeviceCommand(commandArmDisarm ,0);
                         }
                         else {
@@ -219,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 int mode_define = categoryFlightModeAdapter.getItem(position).getFlightModeID();
                 DeviceModeCommand deviceModeCommand = new DeviceModeCommand();
                 deviceModeCommand.SendDataDeviceCommand(commandSetMode ,mode_define);
-                setModeStatus(modeCloud, connectedCloud);
+                setModeStatus(State.getInstance().getModeCloud(), State.getInstance().getConnected());
                 if (DataHolder.getInstance().getConnectionStatus()) {
                     int flightMode = categoryFlightModeAdapter.getItem(position).getFlightModeID();
                     encodeData.SendCommandSetMode(flightMode);
@@ -257,7 +253,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 checked = true;
                 DataHolder.getInstance().setCloudMode(1);
                 mImSwCloudThingsboard.setImageResource(R.drawable.iot_cloud);
-                GetDataDevice dialog = new GetDataDevice(this);
+                GetMsgStateGlobalPositionDevice dialog = new GetMsgStateGlobalPositionDevice(this);
                 dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                 dialog.show();
                 dialog.hide();
@@ -272,10 +268,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void executeCommand(String commandName, JSONObject data) {
         WeatherData weatherData = new WeatherData(MainActivity.this);
         if (commandName.equals("battery_percent")) {
-            if (batteryCloud < 20) {
+            if (State.getInstance().getBattery() < 20) {
                 alanButton.playText("battery low, need to charging station");
             }
-            alanButton.playText(String.valueOf(batteryCloud) + "percent");
+            alanButton.playText(String.valueOf(State.getInstance().getBattery()) + "percent");
         }
 
         if (commandName.equals("weather")) {

@@ -1,6 +1,6 @@
-package com.example.cps_lab411.API;
+package com.example.cps_lab411.RestClient;
 
-import com.example.cps_lab411.UavState.UavParam;
+import com.example.cps_lab411.UavState.RobotArmParam;
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
@@ -8,27 +8,27 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
-public class DeviceManualControl {
+public class DeviceControlRobot {
+    public static Boolean checkControlRobot = false;
+    String Step1 = String.valueOf(RobotArmParam.getInstance().getServo1());
+    String Step2 = String.valueOf(RobotArmParam.getInstance().getServo2());
+    String Step3 = String.valueOf(RobotArmParam.getInstance().getServo3());
+    String Step4 = String.valueOf(RobotArmParam.getInstance().getServo4());
+    String Step5 = String.valueOf(RobotArmParam.getInstance().getServo5());
 
-    public static Boolean checkManualControl = false;
-    String Vx = String.valueOf(UavParam.getInstance().getVx());
-    String Vy = String.valueOf(UavParam.getInstance().getVy());
-    String Vz = String.valueOf(UavParam.getInstance().getVz());
-    String Yawrate = String.valueOf(UavParam.getInstance().getYawRate());
 
     private String accessToken;
     // Thingsboard topic name
     String topic = "v1/devices/me/attributes";
     //data to be send
-    String content = "{Vx:"+ Vx + ", Vy:" + Vy + ", Vz:" + Vz + ", Yawrate:" + Yawrate + "}";
+    String content = "{Step1:"+ Step1 + ", Step2:" + Step2 + ", Step3:" + Step3 + ", Step4:" + Step4 + ",Step5:" + Step5 + "}";
     int qos = 0;
     String broker = "tcp://demo.thingsboard.io:1883";
-    String clientId = "TB2";
+    String clientId = "TB4";
     MemoryPersistence persistence = new MemoryPersistence();
 
-
     public void SendDataDevice() {
-        if (checkManualControl) {
+        if (checkControlRobot) {
             accessToken = "LRpdTZFesTgWTGHMr9a5";
             MqttClient sampleClient = null;
             try {
@@ -39,16 +39,12 @@ public class DeviceManualControl {
             MqttConnectOptions connOpts = new MqttConnectOptions();
             connOpts.setCleanSession(true);
             connOpts.setKeepAliveInterval(60);
-            System.out.println("please get the token from thingsboard device");
             connOpts.setUserName(accessToken);
-            System.out.println("Connecting to broker: " + broker);
             try {
                 sampleClient.connect(connOpts);
             } catch (MqttException e) {
                 e.printStackTrace();
             }
-            System.out.println("Connected to thingsboard broker");
-            System.out.println("Publishing message:" + content);
             MqttMessage message = new MqttMessage(content.getBytes());
             message.setQos(qos);
             try {
@@ -58,5 +54,4 @@ public class DeviceManualControl {
             }
         }
     }
-
 }

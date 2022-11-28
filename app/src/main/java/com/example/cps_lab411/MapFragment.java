@@ -1,20 +1,20 @@
 package com.example.cps_lab411;
 
-import static com.example.cps_lab411.API.DeviceManualControl.checkManualControl;
-import static com.example.cps_lab411.API.DeviceControlRobot.checkControlRobot;
-import static com.example.cps_lab411.API.GetDataDevice.armedCloud;
-import static com.example.cps_lab411.API.GetDataDevice.batteryCloud;
-import static com.example.cps_lab411.API.GetDataDevice.connectedCloud;
-import static com.example.cps_lab411.API.GetDataDevice.modeCloud;
-import static com.example.cps_lab411.API.ModeSelectCommandDevice.LAND;
-import static com.example.cps_lab411.API.ModeSelectCommandDevice.TAKE_OFF;
+import static com.example.cps_lab411.RestClient.DeviceManualControl.checkManualControl;
+import static com.example.cps_lab411.RestClient.DeviceControlRobot.checkControlRobot;
+//import static com.example.cps_lab411.RestClient.GetMsgStateGlobalPositionDevice.armedCloud;
+//import static com.example.cps_lab411.RestClient.GetMsgStateGlobalPositionDevice.batteryCloud;
+//import static com.example.cps_lab411.RestClient.GetMsgStateGlobalPositionDevice.connectedCloud;
+//import static com.example.cps_lab411.RestClient.GetMsgStateGlobalPositionDevice.modeCloud;
+import static com.example.cps_lab411.RestClient.ModeSelectCommandDevice.LAND;
+import static com.example.cps_lab411.RestClient.ModeSelectCommandDevice.TAKE_OFF;
 import static com.example.cps_lab411.MainActivity.checkGotoChargingStation;
 import static com.example.cps_lab411.MainActivity.checkStationCharging;
 import static com.example.cps_lab411.MainActivity.modeDevice;
-import static com.example.cps_lab411.API.GetDataDevice.VxCloud;
-import static com.example.cps_lab411.API.GetDataDevice.altitudeCloud;
-import static com.example.cps_lab411.API.GetDataDevice.latitudeCloud;
-import static com.example.cps_lab411.API.GetDataDevice.longitudeCloud;
+//import static com.example.cps_lab411.RestClient.GetMsgStateGlobalPositionDevice.VxCloud;
+//import static com.example.cps_lab411.RestClient.GetMsgStateGlobalPositionDevice.altitudeCloud;
+//import static com.example.cps_lab411.RestClient.GetMsgStateGlobalPositionDevice.latitudeCloud;
+//import static com.example.cps_lab411.RestClient.GetMsgStateGlobalPositionDevice.longitudeCloud;
 import static com.example.cps_lab411.MainActivity.setArmDisarmStatus;
 import static com.example.cps_lab411.MainActivity.setBatteryStatus;
 import static com.example.cps_lab411.MainActivity.setModeStatus;
@@ -61,16 +61,16 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 
-import com.example.cps_lab411.API.DeviceControlRobot;
-import com.example.cps_lab411.API.DeviceManualControl;
-import com.example.cps_lab411.API.DeviceMsgWaypoint;
-import com.example.cps_lab411.API.GetDataDevice;
-import com.example.cps_lab411.API.GetDataSensors;
-import com.example.cps_lab411.API.ModeSelectCommandDevice;
-import com.example.cps_lab411.API.Weather.WeatherData;
+import com.example.cps_lab411.RestClient.DeviceControlRobot;
+import com.example.cps_lab411.RestClient.DeviceManualControl;
+import com.example.cps_lab411.RestClient.DeviceMsgWaypoint;
+import com.example.cps_lab411.RestClient.GetMsgSensors;
+import com.example.cps_lab411.RestClient.GlobalPosition;
+import com.example.cps_lab411.RestClient.ModeSelectCommandDevice;
 import com.example.cps_lab411.Communication.EncodeData;
 import com.example.cps_lab411.EvenBus.ConntectHandleEvenbus;
 import com.example.cps_lab411.EvenBus.UDPMessage2EvenBus;
+import com.example.cps_lab411.RestClient.State;
 import com.example.cps_lab411.UavState.RobotArmParam;
 import com.example.cps_lab411.UavState.UavParam;
 import com.example.cps_lab411.UavState.WayPointParam;
@@ -243,7 +243,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         mGetData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                GetDataSensors dialog = new GetDataSensors(getContext());
+                GetMsgSensors dialog = new GetMsgSensors(getContext());
                 dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                 dialog.show();
             }
@@ -331,9 +331,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public void checkStateGlobalPosition() {
         //do stuff here
         if (checked) {
-            setBatteryStatus(batteryCloud, connectedCloud);
-            setArmDisarmStatus(armedCloud);
-            setModeStatus(modeCloud, connectedCloud);
+            setBatteryStatus(State.getInstance().getBattery(), State.getInstance().getConnected());
+            setArmDisarmStatus(State.getInstance().getArmed());
+            setModeStatus(State.getInstance().getModeCloud(), State.getInstance().getConnected());
             UpdateGlobalPosition();
             //Show marker charging station
 //            if (checkStationCharging) {
@@ -1226,11 +1226,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     }
 
     public void UpdateGlobalPosition() {
-        mtvLatitude.setText(String.valueOf(latitudeCloud));
-        mtvLongitude.setText(String.valueOf(longitudeCloud));
-        mtvAltitude.setText(String.valueOf(altitudeCloud));
-        mtvVelocity.setText(String.valueOf(VxCloud));
-        UpdateUavMarkerLocation(latitudeCloud, longitudeCloud, VxCloud);
+        mtvLatitude.setText(String.valueOf(GlobalPosition.getInstance().getLatitude()));
+        mtvLongitude.setText(String.valueOf(GlobalPosition.getInstance().getLongitude()));
+        mtvAltitude.setText(String.valueOf(GlobalPosition.getInstance().getAltitude()));
+        mtvVelocity.setText(String.valueOf(GlobalPosition.getInstance().getVx()));
+        UpdateUavMarkerLocation(GlobalPosition.getInstance().getLatitude(), GlobalPosition.getInstance().getLongitude(), GlobalPosition.getInstance().getVx());
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
