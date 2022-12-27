@@ -1,4 +1,4 @@
-package com.example.cps_lab411.RestClient.Weather;
+package com.example.cps_lab411.RestAPI.Weather;
 
 public class Weather {
     private String nameCity;

@@ -1,7 +1,7 @@
-package com.example.cps_lab411.RestClient;
+package com.example.cps_lab411.RestAPI.Thingsboard;
 
-import static com.example.cps_lab411.RestClient.DeviceManualControl.checkManualControl;
-import static com.example.cps_lab411.RestClient.DeviceControlRobot.checkControlRobot;
+import static com.example.cps_lab411.RestAPI.Thingsboard.DeviceManualControl.checkManualControl;
+import static com.example.cps_lab411.RestAPI.Thingsboard.DeviceControlRobot.checkControlRobot;
 import static com.example.cps_lab411.MainActivity.modeDevice;
 import static com.example.cps_lab411.MapFragment.valueAlitude;
 
@@ -19,6 +19,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.cps_lab411.R;
+import com.example.cps_lab411.RestAPI.Category;
+import com.example.cps_lab411.RestAPI.CategoryAdapter;
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
@@ -54,7 +56,7 @@ public class ModeSelectCommandDevice extends Dialog implements View.OnClickListe
     // Thingsboard topic name
     String topic = "v1/devices/me/attributes";
     int qos = 0;
-    String broker = "tcp://demo.thingsboard.io:1883";
+    String broker = "tcp://thingsboard.cloud";
     String clientId = "TB1";
     MemoryPersistence persistence = new MemoryPersistence();
 
@@ -137,7 +139,7 @@ public class ModeSelectCommandDevice extends Dialog implements View.OnClickListe
                 " param2:" + mParam2.getText().toString() + ", param3:" + mParam3.getText().toString()
                 + ",param4:" + mParam4.getText().toString() + "}";
         if (checkCommand) {
-            accessToken = "zb4BF2iuPW1uXCKSM3Rr";
+            accessToken = "EKCGFI5LmeR2q4naWyNl";
             MqttClient sampleClient = null;
             try {
                 sampleClient = new MqttClient(broker, clientId, persistence);

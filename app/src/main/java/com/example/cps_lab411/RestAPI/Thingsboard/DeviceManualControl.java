@@ -1,4 +1,4 @@
-package com.example.cps_lab411.RestClient;
+package com.example.cps_lab411.RestAPI.Thingsboard;
 
 import com.example.cps_lab411.UavState.UavParam;
 
@@ -22,14 +22,14 @@ public class DeviceManualControl {
     //data to be send
     String content = "{Vx:"+ Vx + ", Vy:" + Vy + ", Vz:" + Vz + ", Yawrate:" + Yawrate + "}";
     int qos = 0;
-    String broker = "tcp://demo.thingsboard.io:1883";
+    String broker = "tcp://thingsboard.cloud";
     String clientId = "TB2";
     MemoryPersistence persistence = new MemoryPersistence();
 
 
     public void SendDataDevice() {
         if (checkManualControl) {
-            accessToken = "LRpdTZFesTgWTGHMr9a5";
+            accessToken = "2ZShzlHDDNPc4xtKsZBd";
             MqttClient sampleClient = null;
             try {
                 sampleClient = new MqttClient(broker, clientId, persistence);

@@ -1,4 +1,4 @@
-package com.example.cps_lab411.RestClient;
+package com.example.cps_lab411.RestAPI.Thingsboard;
 
 import com.example.cps_lab411.UavState.RobotArmParam;
 
@@ -23,13 +23,13 @@ public class DeviceControlRobot {
     //data to be send
     String content = "{Step1:"+ Step1 + ", Step2:" + Step2 + ", Step3:" + Step3 + ", Step4:" + Step4 + ",Step5:" + Step5 + "}";
     int qos = 0;
-    String broker = "tcp://demo.thingsboard.io:1883";
+    String broker = "tcp://thingsboard.cloud";
     String clientId = "TB4";
     MemoryPersistence persistence = new MemoryPersistence();
 
     public void SendDataDevice() {
         if (checkControlRobot) {
-            accessToken = "LRpdTZFesTgWTGHMr9a5";
+            accessToken = "2ZShzlHDDNPc4xtKsZBd";
             MqttClient sampleClient = null;
             try {
                 sampleClient = new MqttClient(broker, clientId, persistence);

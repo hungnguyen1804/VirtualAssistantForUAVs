@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "677455326393",
+    "project_id": "pathplanning-7f14a",
+    "storage_bucket": "pathplanning-7f14a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:677455326393:android:07d08e37148eae369dff68",
+        "android_client_info": {
+          "package_name": "com.example.cps_lab411"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "677455326393-cag1gdid5b2ks2b070km7mpoqdh7bsih.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzF0GAw6WF7ULAWgVb2v0maTWaeQjB1w0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "677455326393-cag1gdid5b2ks2b070km7mpoqdh7bsih.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

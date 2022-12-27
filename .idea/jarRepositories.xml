@@ -31,5 +31,10 @@
       <option name="name" value="maven" />
       <option name="url" value="https://repo.thingsboard.io/artifactory/libs-release-public" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven" />
+      <option name="name" value="maven" />
+      <option name="url" value="https://raw.github.com/zeeshanejaz/unirest-android/mvn-repo" />
+    </remote-repository>
   </component>
 </project>

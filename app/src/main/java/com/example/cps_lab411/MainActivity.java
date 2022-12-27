@@ -1,16 +1,16 @@
 package com.example.cps_lab411;
 
-//import static com.example.cps_lab411.RestClient.GetMsgStateGlobalPositionDevice.armedCloud;
-//import static com.example.cps_lab411.RestClient.GetMsgStateGlobalPositionDevice.batteryCloud;
-//import static com.example.cps_lab411.RestClient.GetMsgStateGlobalPositionDevice.connectedCloud;
-//import static com.example.cps_lab411.RestClient.GetMsgStateGlobalPositionDevice.modeCloud;
-import static com.example.cps_lab411.RestClient.ModeSelectCommandDevice.HOLD;
-import static com.example.cps_lab411.RestClient.ModeSelectCommandDevice.LAND;
-import static com.example.cps_lab411.RestClient.ModeSelectCommandDevice.MANUAL;
-import static com.example.cps_lab411.RestClient.ModeSelectCommandDevice.OFF_BOARD;
-import static com.example.cps_lab411.RestClient.ModeSelectCommandDevice.POSITION;
-import static com.example.cps_lab411.RestClient.ModeSelectCommandDevice.TAKE_OFF;
-import static com.example.cps_lab411.RestClient.ModeSelectCommandDevice.altitudeTest;
+//import static com.example.cps_lab411.RestClient.Thingsboard.GetMsgStateGlobalPositionDevice.armedCloud;
+//import static com.example.cps_lab411.RestClient.Thingsboard.GetMsgStateGlobalPositionDevice.batteryCloud;
+//import static com.example.cps_lab411.RestClient.Thingsboard.GetMsgStateGlobalPositionDevice.connectedCloud;
+//import static com.example.cps_lab411.RestClient.Thingsboard.GetMsgStateGlobalPositionDevice.modeCloud;
+import static com.example.cps_lab411.RestAPI.Thingsboard.ModeSelectCommandDevice.HOLD;
+import static com.example.cps_lab411.RestAPI.Thingsboard.ModeSelectCommandDevice.LAND;
+import static com.example.cps_lab411.RestAPI.Thingsboard.ModeSelectCommandDevice.MANUAL;
+import static com.example.cps_lab411.RestAPI.Thingsboard.ModeSelectCommandDevice.OFF_BOARD;
+import static com.example.cps_lab411.RestAPI.Thingsboard.ModeSelectCommandDevice.POSITION;
+import static com.example.cps_lab411.RestAPI.Thingsboard.ModeSelectCommandDevice.TAKE_OFF;
+import static com.example.cps_lab411.RestAPI.Thingsboard.ModeSelectCommandDevice.altitudeTest;
 import static com.example.cps_lab411.MapFragment.checked;
 
 import androidx.annotation.NonNull;
@@ -37,11 +37,11 @@ import com.alan.alansdk.AlanCallback;
 import com.alan.alansdk.AlanConfig;
 import com.alan.alansdk.button.AlanButton;
 import com.alan.alansdk.events.EventCommand;
-import com.example.cps_lab411.RestClient.DeviceModeCommand;
-import com.example.cps_lab411.RestClient.GetMsgStateGlobalPositionDevice;
-import com.example.cps_lab411.RestClient.State;
-import com.example.cps_lab411.RestClient.Weather.Weather;
-import com.example.cps_lab411.RestClient.Weather.WeatherData;
+import com.example.cps_lab411.RestAPI.Thingsboard.DeviceModeCommand;
+import com.example.cps_lab411.RestAPI.Thingsboard.GetMsgStateGlobalPositionDevice;
+import com.example.cps_lab411.RestAPI.State;
+import com.example.cps_lab411.RestAPI.Weather.Weather;
+import com.example.cps_lab411.RestAPI.Weather.WeatherData;
 import com.example.cps_lab411.Category.CategoryFlightModeAdapter;
 import com.example.cps_lab411.Category.CategoryMode;
 import com.example.cps_lab411.Communication.EncodeData;
@@ -333,6 +333,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (commandName.equals("go_to_charging_station")) {
             checkGotoChargingStation = true;
             alanButton.playText("OK, flying to charging station");
+        }
+        //**********Process vertical UAV**********//
+        if (checkStationCharging) {
+            alanButton.playText("Wind is " + Weather.getInstance().getWind());
+            if (Integer.parseInt(Weather.getInstance().getWind()) > 5 && Integer.parseInt(Weather.getInstance().getWind()) < 10) {
+
+            }
+            else if (Integer.parseInt(Weather.getInstance().getWind()) > 10 && Integer.parseInt(Weather.getInstance().getWind()) < 15) {
+
+            }
+            else {
+
+            }
         }
     }
 

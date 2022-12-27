@@ -1,4 +1,4 @@
-package com.example.cps_lab411.RestClient;
+package com.example.cps_lab411.RestAPI.Thingsboard;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -17,6 +17,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.cps_lab411.MainActivity;
 import com.example.cps_lab411.R;
+import com.example.cps_lab411.RestAPI.State;
+import com.example.cps_lab411.RestAPI.VolleyController;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -73,7 +75,6 @@ public class GetMsgSensors extends Dialog implements View.OnClickListener {
     private void addDataToScreen() {
         getTelemetryValuesSensors("DEVICE", deviceIdSensors);
     }
-
 
     private void getTelemetryValuesSensors(String deviceType, String deviceId) {
         String URL = baseURL + "/plugins/telemetry/" + deviceType + "/" + deviceId + "/values/attributes/CLIENT_SCOPE";

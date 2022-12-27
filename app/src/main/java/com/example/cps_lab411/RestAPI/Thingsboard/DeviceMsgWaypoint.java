@@ -1,4 +1,4 @@
-package com.example.cps_lab411.RestClient;
+package com.example.cps_lab411.RestAPI.Thingsboard;
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
@@ -13,14 +13,14 @@ public class DeviceMsgWaypoint {
     // Thingsboard topic name
     String topic = "v1/devices/me/attributes";
     int qos = 0;
-    String broker = "tcp://demo.thingsboard.io:1883";
+    String broker = "tcp://thingsboard.cloud";
     String clientId = "TB3";
     MemoryPersistence persistence = new MemoryPersistence();
 
     public void SendDataDevice(float lat, float lon, float alt) {
 
         String content = "{wpid:"+ String.valueOf(wid) + ", latitude:" + String.valueOf(lat) + ", longitude:" + String.valueOf(lon) + ", altitude:" + String.valueOf(alt) + "}";
-        accessToken = "ocEh93GoUjCplc4Eoxsp";
+        accessToken = "u7JyZ2q9QayL07XmsTIA";
         MqttClient sampleClient = null;
         try {
             sampleClient = new MqttClient(broker, clientId, persistence);

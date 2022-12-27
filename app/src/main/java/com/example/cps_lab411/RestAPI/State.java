@@ -1,4 +1,4 @@
-package com.example.cps_lab411.RestClient;
+package com.example.cps_lab411.RestAPI;
 
 public class State {
     private int ModeCloud = 0;

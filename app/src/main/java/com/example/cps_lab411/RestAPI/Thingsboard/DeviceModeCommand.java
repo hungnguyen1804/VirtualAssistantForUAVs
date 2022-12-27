@@ -1,4 +1,4 @@
-package com.example.cps_lab411.RestClient;
+package com.example.cps_lab411.RestAPI.Thingsboard;
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
@@ -13,14 +13,14 @@ public class DeviceModeCommand {
     // Thingsboard topic name
     String topic = "v1/devices/me/attributes";
     int qos = 0;
-    String broker = "tcp://demo.thingsboard.io:1883";
+    String broker = "tcp://thingsboard.cloud";
     String clientId = "TB1";
     MemoryPersistence persistence = new MemoryPersistence();
 
     public void SendDataDeviceCommand(int commandSetMode ,int modeFlight) {
 
         String content = "{id:" + id + ",mode_id:"+ commandSetMode + ", param1:" + modeFlight +"}";
-        accessToken = "zb4BF2iuPW1uXCKSM3Rr";
+        accessToken = "EKCGFI5LmeR2q4naWyNl";
         MqttClient sampleClient = null;
         try {
             sampleClient = new MqttClient(broker, clientId, persistence);

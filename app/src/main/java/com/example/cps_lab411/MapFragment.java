@@ -1,20 +1,20 @@
 package com.example.cps_lab411;
 
-import static com.example.cps_lab411.RestClient.DeviceManualControl.checkManualControl;
-import static com.example.cps_lab411.RestClient.DeviceControlRobot.checkControlRobot;
-//import static com.example.cps_lab411.RestClient.GetMsgStateGlobalPositionDevice.armedCloud;
-//import static com.example.cps_lab411.RestClient.GetMsgStateGlobalPositionDevice.batteryCloud;
-//import static com.example.cps_lab411.RestClient.GetMsgStateGlobalPositionDevice.connectedCloud;
-//import static com.example.cps_lab411.RestClient.GetMsgStateGlobalPositionDevice.modeCloud;
-import static com.example.cps_lab411.RestClient.ModeSelectCommandDevice.LAND;
-import static com.example.cps_lab411.RestClient.ModeSelectCommandDevice.TAKE_OFF;
+import static com.example.cps_lab411.RestAPI.Thingsboard.DeviceManualControl.checkManualControl;
+import static com.example.cps_lab411.RestAPI.Thingsboard.DeviceControlRobot.checkControlRobot;
+//import static com.example.cps_lab411.RestClient.Thingsboard.GetMsgStateGlobalPositionDevice.armedCloud;
+//import static com.example.cps_lab411.RestClient.Thingsboard.GetMsgStateGlobalPositionDevice.batteryCloud;
+//import static com.example.cps_lab411.RestClient.Thingsboard.GetMsgStateGlobalPositionDevice.connectedCloud;
+//import static com.example.cps_lab411.RestClient.Thingsboard.GetMsgStateGlobalPositionDevice.modeCloud;
+import static com.example.cps_lab411.RestAPI.Thingsboard.ModeSelectCommandDevice.LAND;
+import static com.example.cps_lab411.RestAPI.Thingsboard.ModeSelectCommandDevice.TAKE_OFF;
 import static com.example.cps_lab411.MainActivity.checkGotoChargingStation;
 import static com.example.cps_lab411.MainActivity.checkStationCharging;
 import static com.example.cps_lab411.MainActivity.modeDevice;
-//import static com.example.cps_lab411.RestClient.GetMsgStateGlobalPositionDevice.VxCloud;
-//import static com.example.cps_lab411.RestClient.GetMsgStateGlobalPositionDevice.altitudeCloud;
-//import static com.example.cps_lab411.RestClient.GetMsgStateGlobalPositionDevice.latitudeCloud;
-//import static com.example.cps_lab411.RestClient.GetMsgStateGlobalPositionDevice.longitudeCloud;
+//import static com.example.cps_lab411.RestClient.Thingsboard.GetMsgStateGlobalPositionDevice.VxCloud;
+//import static com.example.cps_lab411.RestClient.Thingsboard.GetMsgStateGlobalPositionDevice.altitudeCloud;
+//import static com.example.cps_lab411.RestClient.Thingsboard.GetMsgStateGlobalPositionDevice.latitudeCloud;
+//import static com.example.cps_lab411.RestClient.Thingsboard.GetMsgStateGlobalPositionDevice.longitudeCloud;
 import static com.example.cps_lab411.MainActivity.setArmDisarmStatus;
 import static com.example.cps_lab411.MainActivity.setBatteryStatus;
 import static com.example.cps_lab411.MainActivity.setModeStatus;
@@ -61,16 +61,19 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 
-import com.example.cps_lab411.RestClient.DeviceControlRobot;
-import com.example.cps_lab411.RestClient.DeviceManualControl;
-import com.example.cps_lab411.RestClient.DeviceMsgWaypoint;
-import com.example.cps_lab411.RestClient.GetMsgSensors;
-import com.example.cps_lab411.RestClient.GlobalPosition;
-import com.example.cps_lab411.RestClient.ModeSelectCommandDevice;
+import com.example.cps_lab411.RestAPI.FirebaseImageDialog;
+import com.example.cps_lab411.RestAPI.Thingsboard.DeviceControlRobot;
+import com.example.cps_lab411.RestAPI.Thingsboard.DeviceManualControl;
+import com.example.cps_lab411.RestAPI.Thingsboard.DeviceMsgWaypoint;
+import com.example.cps_lab411.RestAPI.Thingsboard.GetMsgSensors;
+import com.example.cps_lab411.RestAPI.GlobalPosition;
+import com.example.cps_lab411.RestAPI.Thingsboard.ModeSelectCommandDevice;
+//import com.example.cps_lab411.RestAPI.Thingspeak.SendDataUsingMQTT;
+//import com.example.cps_lab411.RestAPI.Thingspeak.SendDataUsingRestAPI;
 import com.example.cps_lab411.Communication.EncodeData;
 import com.example.cps_lab411.EvenBus.ConntectHandleEvenbus;
 import com.example.cps_lab411.EvenBus.UDPMessage2EvenBus;
-import com.example.cps_lab411.RestClient.State;
+import com.example.cps_lab411.RestAPI.State;
 import com.example.cps_lab411.UavState.RobotArmParam;
 import com.example.cps_lab411.UavState.UavParam;
 import com.example.cps_lab411.UavState.WayPointParam;
@@ -107,7 +110,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private static double lonUDP = 0;
     public static boolean checked = false;
     private Handler myHandler;
-    private static final int DELAY = 5000;
+    private static final int DELAY = 1000;
     GoogleMap mMap;
     Marker UAVLocationMarker = null;
     Marker StationCharging = null;
@@ -154,10 +157,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     // ThingsBoard REST API URL
     String url = "s";
-
-    // Default Tenant Administrator credentials
-    String username = "linh.nn280399@gmail.com";
-    String password = "ktttlab411";
 
     Polyline DrawPolyline = null;
     List<LatLng> latLngList = new ArrayList<>();
@@ -243,7 +242,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         mGetData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                GetMsgSensors dialog = new GetMsgSensors(getContext());
+                FirebaseImageDialog dialog = new FirebaseImageDialog(getContext());
                 dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                 dialog.show();
             }
@@ -678,11 +677,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     }
 
     /*==================================================================================
-     *                             Enable / Disable Camera
-     *==================================================================================
-     */
-
-    /*==================================================================================
      *                             Handle Draw Mission
      *==================================================================================
      */
@@ -774,8 +768,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                         //If input is valid, create a waypoint
                         wayPoint.setAltitude(Float.parseFloat(editAltitude.getText().toString()));
                         wayPoint.setSpeed(Float.parseFloat(editSpeed.getText().toString()));
-                        wayPoint.setLatitude((float) latLng.latitude);
-                        wayPoint.setLongitude((float) latLng.longitude);
+                        wayPoint.setLatitude((float) latLng.latitude * 1000000);
+                        wayPoint.setLongitude((float) latLng.longitude * 1000000);
                         float alt = wayPoint.getAltitude();
                         float lat = wayPoint.getLatitude();
                         float lon = wayPoint.getLongitude();
@@ -857,6 +851,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                     joystickright.setVisibility(View.VISIBLE);
                     EnableJoystick = true;
                     DataHolder.getInstance().setJoyStickEnable(true);
+
                     //When joystick was enable, send data to thingsboard
                     Runnable controlRobot = new Runnable() {
                         public void run() {

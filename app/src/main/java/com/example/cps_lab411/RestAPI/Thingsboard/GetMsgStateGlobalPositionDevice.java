@@ -1,4 +1,4 @@
-package com.example.cps_lab411.RestClient;
+package com.example.cps_lab411.RestAPI.Thingsboard;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -13,6 +13,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.example.cps_lab411.MainActivity;
 import com.example.cps_lab411.R;
+import com.example.cps_lab411.RestAPI.GlobalPosition;
+import com.example.cps_lab411.RestAPI.State;
+import com.example.cps_lab411.RestAPI.VolleyController;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 public class GetMsgStateGlobalPositionDevice extends Dialog implements View.OnClickListener {
 
     public static final String TAG = MainActivity.class.getSimpleName();
-    private static final String baseURL = "https://demo.thingsboard.io:443/api";
+    private static final String baseURL = "https://thingsboard.cloud:443/api";
     private String authTokenState;
     private String authTokenGlobalPosition;
     private String deviceIdState;
@@ -57,11 +60,11 @@ public class GetMsgStateGlobalPositionDevice extends Dialog implements View.OnCl
 
         setContentView(R.layout.item_get_data_state_global_position);
         //Token
-        authTokenState = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0cmFpbmluZy5sYWI0MTFAZ21haWwuY29tIiwidXNlcklkIjoiN2FhZTNmMTAtMjE5Yi0xMWVjLWI0YTUtY2ZiMjg5YWYzOGQ5Iiwic2NvcGVzIjpbIlRFTkFOVF9BRE1JTiJdLCJzZXNzaW9uSWQiOiI5NDNjZjQ0Yy0xNWQ3LTRhNTMtYWEwZC0zY2UyMTVjZjcwMjkiLCJpc3MiOiJ0aGluZ3Nib2FyZC5pbyIsImlhdCI6MTY2ODcwNTI2NSwiZXhwIjoxNjcwNTA1MjY1LCJmaXJzdE5hbWUiOiI0MTEiLCJsYXN0TmFtZSI6ImxhYiIsImVuYWJsZWQiOnRydWUsInByaXZhY3lQb2xpY3lBY2NlcHRlZCI6dHJ1ZSwiaXNQdWJsaWMiOmZhbHNlLCJ0ZW5hbnRJZCI6IjdhMjU2MDAwLTIxOWItMTFlYy1iNGE1LWNmYjI4OWFmMzhkOSIsImN1c3RvbWVySWQiOiIxMzgxNDAwMC0xZGQyLTExYjItODA4MC04MDgwODA4MDgwODAifQ.JQ94qdjZtbtU2mTZ2dZ0zAsS6t-DiSZyCCmBY4lk1wacKjBWDrmiiq51l33ruRCleB2_LKLCz2DKaKXxA6Jr7g";
-        authTokenGlobalPosition = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0cmFpbmluZy5sYWI0MTFAZ21haWwuY29tIiwidXNlcklkIjoiN2FhZTNmMTAtMjE5Yi0xMWVjLWI0YTUtY2ZiMjg5YWYzOGQ5Iiwic2NvcGVzIjpbIlRFTkFOVF9BRE1JTiJdLCJzZXNzaW9uSWQiOiI5NDNjZjQ0Yy0xNWQ3LTRhNTMtYWEwZC0zY2UyMTVjZjcwMjkiLCJpc3MiOiJ0aGluZ3Nib2FyZC5pbyIsImlhdCI6MTY2ODcwNTI2NSwiZXhwIjoxNjcwNTA1MjY1LCJmaXJzdE5hbWUiOiI0MTEiLCJsYXN0TmFtZSI6ImxhYiIsImVuYWJsZWQiOnRydWUsInByaXZhY3lQb2xpY3lBY2NlcHRlZCI6dHJ1ZSwiaXNQdWJsaWMiOmZhbHNlLCJ0ZW5hbnRJZCI6IjdhMjU2MDAwLTIxOWItMTFlYy1iNGE1LWNmYjI4OWFmMzhkOSIsImN1c3RvbWVySWQiOiIxMzgxNDAwMC0xZGQyLTExYjItODA4MC04MDgwODA4MDgwODAifQ.JQ94qdjZtbtU2mTZ2dZ0zAsS6t-DiSZyCCmBY4lk1wacKjBWDrmiiq51l33ruRCleB2_LKLCz2DKaKXxA6Jr7g";
+        authTokenState = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJsYWI0MTEudHJhaW5pbmdAZ21haWwuY29tIiwidXNlcklkIjoiM2VjMWNhNTAtNzQ0MC0xMWVkLWIyNGMtYWI0MDgyNmM2ODliIiwic2NvcGVzIjpbIlRFTkFOVF9BRE1JTiJdLCJpc3MiOiJ0aGluZ3Nib2FyZC5jbG91ZCIsImlhdCI6MTY3MDMxMzc2NywiZXhwIjoxNjcwMzQyNTY3LCJmaXJzdE5hbWUiOiJUcmFpbmluZyIsImxhc3ROYW1lIjoiTGFiNDExIiwiZW5hYmxlZCI6dHJ1ZSwiaXNQdWJsaWMiOmZhbHNlLCJpc0JpbGxpbmdTZXJ2aWNlIjpmYWxzZSwicHJpdmFjeVBvbGljeUFjY2VwdGVkIjp0cnVlLCJ0ZXJtc09mVXNlQWNjZXB0ZWQiOnRydWUsInRlbmFudElkIjoiM2RiZWQ5NDAtNzQ0MC0xMWVkLWIyNGMtYWI0MDgyNmM2ODliIiwiY3VzdG9tZXJJZCI6IjEzODE0MDAwLTFkZDItMTFiMi04MDgwLTgwODA4MDgwODA4MCJ9.2_xHbX4oDye_J6Xeg1JvMrgg8luL4GosikJVBoSjxsLkWMo2QBeh4DOY7xy6SAQ75l9D9GKRJJ-RbIEiJVcSXg";
+        authTokenGlobalPosition = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJsYWI0MTEudHJhaW5pbmdAZ21haWwuY29tIiwidXNlcklkIjoiM2VjMWNhNTAtNzQ0MC0xMWVkLWIyNGMtYWI0MDgyNmM2ODliIiwic2NvcGVzIjpbIlRFTkFOVF9BRE1JTiJdLCJpc3MiOiJ0aGluZ3Nib2FyZC5jbG91ZCIsImlhdCI6MTY3MDMxMzc2NywiZXhwIjoxNjcwMzQyNTY3LCJmaXJzdE5hbWUiOiJUcmFpbmluZyIsImxhc3ROYW1lIjoiTGFiNDExIiwiZW5hYmxlZCI6dHJ1ZSwiaXNQdWJsaWMiOmZhbHNlLCJpc0JpbGxpbmdTZXJ2aWNlIjpmYWxzZSwicHJpdmFjeVBvbGljeUFjY2VwdGVkIjp0cnVlLCJ0ZXJtc09mVXNlQWNjZXB0ZWQiOnRydWUsInRlbmFudElkIjoiM2RiZWQ5NDAtNzQ0MC0xMWVkLWIyNGMtYWI0MDgyNmM2ODliIiwiY3VzdG9tZXJJZCI6IjEzODE0MDAwLTFkZDItMTFiMi04MDgwLTgwODA4MDgwODA4MCJ9.2_xHbX4oDye_J6Xeg1JvMrgg8luL4GosikJVBoSjxsLkWMo2QBeh4DOY7xy6SAQ75l9D9GKRJJ-RbIEiJVcSXg";
         //DeviceId
-        deviceIdState = "3ecb4dd0-4ebd-11ed-b827-c9be76c6f5d7";
-        deviceIdGlobal = "fb322470-4ec3-11ed-b827-c9be76c6f5d7";
+        deviceIdState = "cc996430-746f-11ed-8b62-e9eba22b9df6";
+        deviceIdGlobal = "183a8180-7470-11ed-a3e8-cd953d903e76";
 
 
         Runnable runnable = new Runnable() {
